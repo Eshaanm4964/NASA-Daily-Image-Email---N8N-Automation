@@ -1,0 +1,412 @@
+{
+  "name": "N8N Automation File",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5b3af8c5-98f4-47f5-86ec-1b2c59184abc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.nasa.gov/planetary/apod",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "NQjfTcN5WA0Ed3EXNfswQfmtrl6fGcLr8nSsZUZn"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "85093d0a-7083-4eb3-adbb-9cfccae20e99",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bd81d653-da88-4e82-9eb9-5081c1b70606",
+              "leftValue": "={{$json[\"media_type\"]}} ",
+              "rightValue": "image ",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "c1c830ad-a3c8-404f-81c3-3567e710e1d1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"email\"]}}",
+        "subject": "=🌌 Daily Space Photo:{{ $('HTTP Request').item.json.title }}\n",
+        "message": "=<h2>{{$node[\"HTTP Request\"].json[\"title\"]}}</h2>\n\n<img src=\"{{$node[\"HTTP Request\"].json[\"url\"]}}\" width=\"600\"/>\n\n<p>{{$node[\"HTTP Request\"].json[\"explanation\"]}}</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        -240
+      ],
+      "id": "bf4fdb3f-3f1f-45b0-ab43-2392c642de48",
+      "name": "Send a message",
+      "webhookId": "4fcc53bb-1db2-4cf3-9355-721e9bf82afb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kIazz5sNC56LJmCc",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1vXNTcNc5rTOpm0EATlVRv3PkWm6oe5KV2KWAdf4FGYE",
+          "mode": "list",
+          "cachedResultName": "SpacePhotoSubscribers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vXNTcNc5rTOpm0EATlVRv3PkWm6oe5KV2KWAdf4FGYE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 516600266,
+          "mode": "list",
+          "cachedResultName": "test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vXNTcNc5rTOpm0EATlVRv3PkWm6oe5KV2KWAdf4FGYE/edit#gid=516600266"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        -112
+      ],
+      "id": "0d49bd0c-83f7-4d97-8d5e-6fa06cb58132",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WLukgw1OfdmGTqzT",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        656,
+        160
+      ],
+      "id": "1f32d918-0f8e-4782-b095-20899fbb99ae",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b54624d9-0e18-405f-aeef-cac9293c5a1b",
+              "leftValue": "={{ $json.active }}",
+              "rightValue": "TRUE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        816,
+        -112
+      ],
+      "id": "d5140cc3-e14f-4da4-a428-609a14a18af2",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -48
+      ],
+      "id": "f45f6541-9327-4078-89be-682376c1a2c8",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1vXNTcNc5rTOpm0EATlVRv3PkWm6oe5KV2KWAdf4FGYE",
+          "mode": "list",
+          "cachedResultName": "SpacePhotoSubscribers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vXNTcNc5rTOpm0EATlVRv3PkWm6oe5KV2KWAdf4FGYE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 516600266,
+          "mode": "list",
+          "cachedResultName": "test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vXNTcNc5rTOpm0EATlVRv3PkWm6oe5KV2KWAdf4FGYE/edit#gid=516600266"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $json.email }}",
+            "activation_time": "={{ $json['activation time'] }}",
+            "active": "={{ $json.active }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "activation_time",
+              "displayName": "activation_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "active",
+              "displayName": "active",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        -224
+      ],
+      "id": "3a7da60f-139b-49f3-973c-9b333e8d2f2a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WLukgw1OfdmGTqzT",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Space Subscriber",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "activation time"
+            },
+            {
+              "fieldLabel": "active",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "True"
+                  },
+                  {
+                    "option": "False"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -128,
+        -224
+      ],
+      "id": "c6e80356-1d84-48dc-a5c7-b1bc85557dad",
+      "name": "On form submission",
+      "webhookId": "02dce17f-bb15-4d52-acd3-150f8dcfe7ee"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6321e47f-6fd7-4811-b17d-2dbb10e1d447",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "57f576bab3b470dff763d276210bc54b90dc5b7c84cf1dfa924028eb69026cbd"
+  },
+  "id": "Q04FtTQLTJ0vPW1H",
+  "tags": []
+}
