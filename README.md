@@ -1,14 +1,10 @@
-Here’s a clean, professional README.md you can use for your project 👇
-
-You can copy-paste this directly into GitHub.
-
-🚀 Daily NASA APOD Mailer
+**🚀 Daily NASA APOD Mailer**
 
 An automated email system that sends NASA's Astronomy Picture of the Day (APOD) to subscribed users at their chosen time.
 
 Built using n8n, Google Sheets, and Gmail automation.
 
-🌌 Project Overview
+**🌌 Project Overview**
 
 This project allows users to:
 
@@ -24,7 +20,7 @@ Form Workflow → Collects user data
 
 Schedule Workflow → Sends daily emails
 
-🏗 Architecture
+**🏗 Architecture**
 User Form Submission
         ↓
 Google Sheets (Database)
@@ -35,31 +31,31 @@ NASA APOD API
         ↓
 Email Sent via Gmail
 
-🛠 Tech Stack
+**🛠 Tech Stack**
 
-n8n – Workflow automation
+**n8n **– Workflow automation
 
-Google Sheets – Subscriber database
+**Google Sheets** – Subscriber database
 
-NASA APOD API – Daily image source
+**NASA APOD API** – Daily image source
 
-Gmail Node – Email delivery
+**Gmail Node **– Email delivery
 
-Form Trigger (n8n) – Subscription form
+**Form Trigger (n8n)** – Subscription form
 
-📋 Workflow Breakdown
-🟢 Workflow 1: Subscription Collector
+📋** Workflow Breakdown**
+🟢 **Workflow 1:** Subscription Collector
 
 Trigger:
 
 Form Trigger
 
-Flow:
+**Flow:**
 
 Form Submission → Append Row in Google Sheets
 
 
-Stores:
+**Stores:**
 
 email
 
@@ -67,20 +63,20 @@ activation_time
 
 active (TRUE/FALSE)
 
-🔵 Workflow 2: Daily Email Sender
+**🔵 Workflow 2: Daily Email Sender**
 
-Trigger:
+**Trigger:**
 
 Schedule Trigger (runs periodically)
 
-Flow:
+**Flow:**
 
 Schedule → NASA API Request → Get Rows from Sheet
         → Check Time + Active Status
         → Send Email
 
 
-Logic:
+**Logic:**
 
 Sends email only if:
 
@@ -88,21 +84,21 @@ activation_time matches current time
 
 active = TRUE
 
-📊 Google Sheet Structure
+**📊 Google Sheet Structure**
 email	activation_time	active
 test@gmail.com
 	08:00	TRUE
 
 Both workflows use the same sheet.
 
-🔑 NASA API Used
+**🔑 NASA API Used**
 https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY
 
 
-You will need a free API key from:
+**You will need a free API key from:**
 https://api.nasa.gov
 
-⚙️ Setup Instructions
+**⚙️ Setup Instructions**
 
 Clone this repository
 
@@ -118,7 +114,7 @@ Add your NASA API key
 
 Activate both workflows
 
-🔐 Production Notes
+**🔐 Production Notes**
 
 Workflows are separated for clean architecture
 
@@ -128,7 +124,7 @@ Form and Schedule triggers operate independently
 
 Easy to scale or migrate to a real database later
 
-🚀 Possible Improvements
+**🚀 Possible Improvements**
 
 Add unsubscribe feature
 
@@ -140,7 +136,7 @@ Move from Sheets → PostgreSQL
 
 Add email formatting (HTML template)
 
-📌 Future Expansion
+**📌 Future Expansion**
 
 This project can be extended into:
 
@@ -150,6 +146,6 @@ Multi-topic subscription system
 
 SaaS automation product
 
-👨‍💻 Author
+**👨‍💻 Author**
 
 Built as a learning + automation project using n8n.
